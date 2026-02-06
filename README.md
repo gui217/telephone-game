@@ -7,7 +7,7 @@ A web UI for the classic children’s game **Telephone Game** (also known as **C
 - **Four parameters**
   - **Number of children** – length of the chain (1–20)
   - **ASR model** – e.g. **Whisper** (OpenAI)
-  - **TTS model** – **Chatterbox** or **Chatterbox Turbo** (runs locally; [resemble-ai/chatterbox](https://github.com/resemble-ai/chatterbox))
+  - **TTS model** – **Chatterbox** (runs locally; [resemble-ai/chatterbox](https://github.com/resemble-ai/chatterbox))
   - **Initial message** – either type text or **record your own voice**
 - **Live progress** – each TTS and STT result is pushed to the UI over SSE as it’s ready
 - **Playback** – listen to each TTS segment in the browser
@@ -38,7 +38,6 @@ pip install -r requirements.txt
 
 **Environment variables (create `.env` or export):**
 
-- `OPENAI_API_KEY` – for Whisper ASR ([OpenAI API](https://platform.openai.com/))
 - `CHATTERBOX_PROMPT_PATH` – (optional) path to a ~10s WAV reference clip for voice cloning with Chatterbox
 
 ### Frontend

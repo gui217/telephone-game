@@ -6,7 +6,7 @@ Chain: TTS -> STT -> TTS -> STT ... for N children; stream each step via SSE.
 import base64
 import json
 import os
-from typing import Optional
+from typing import Callable, Optional
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,7 +14,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from services.asr import ASRAdapter, LocalWhisperASRAdapter
-from services.tts import ChatterboxTTSAdapter, ChatterboxTurboTTSAdapter, TTSAdapter
+from services.tts import ChatterboxTTSAdapter, TTSAdapter
 
 app = FastAPI(title="Telephone Game", version="1.0.0")
 
@@ -26,21 +26,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Model registry (extensible)
-ASR_MODELS: dict[str, type[ASRAdapter]] = {
-    "whisper": LocalWhisperASRAdapter,
+# Model registry (extensible). Values are callables that return an adapter.
+ASR_MODELS: dict[str, Callable[[], ASRAdapter]] = {
+    "whisper-tiny": lambda: LocalWhisperASRAdapter("tiny"),
+    "whisper-base": lambda: LocalWhisperASRAdapter("base"),
+    "whisper-small": lambda: LocalWhisperASRAdapter("small"),
+    "whisper-medium": lambda: LocalWhisperASRAdapter("medium"),
+    "whisper-large": lambda: LocalWhisperASRAdapter("large"),
+    "whisper": lambda: LocalWhisperASRAdapter("tiny"),  # alias
 }
 TTS_MODELS: dict[str, type[TTSAdapter]] = {
     "chatterbox": ChatterboxTTSAdapter,
-    "chatterbox-turbo": ChatterboxTurboTTSAdapter,
 }
 
 
 class GameParams(BaseModel):
     """Parameters for one telephone game run."""
     num_children: int = Field(default=4, ge=1, le=20, description="Number of children in the chain")
-    asr_model: str = Field(default="whisper", description="ASR model key (e.g. whisper)")
-    tts_model: str = Field(default="chatterbox", description="TTS model key (chatterbox or chatterbox-turbo)")
+    asr_model: str = Field(default="whisper-tiny", description="ASR model key (e.g. whisper-tiny, whisper-base)")
+    tts_model: str = Field(default="chatterbox", description="TTS model key (chatterbox)")
     text: Optional[str] = Field(default=None, description="Initial message as text (omit if using audio)")
 
 
@@ -116,7 +120,7 @@ async def _run_telephone_stream(
 @app.post("/api/game/start")
 async def start_game_stream(
     num_children: int = Form(4),
-    asr_model: str = Form("whisper"),
+    asr_model: str = Form("whisper-tiny"),
     tts_model: str = Form("chatterbox"),
     text: Optional[str] = Form(None),
     audio: Optional[UploadFile] = File(None),

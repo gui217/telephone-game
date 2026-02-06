@@ -59,33 +59,3 @@ class ChatterboxTTSAdapter(TTSAdapter):
         torchaudio.save(buf, wav.cpu(), model.sr, format="wav")
         buf.seek(0)
         return buf.read()
-
-
-class ChatterboxTurboTTSAdapter(TTSAdapter):
-    """
-    Local Chatterbox-Turbo TTS (faster, paralinguistic tags like [chuckle]).
-    pip install chatterbox-tts
-    """
-
-    def __init__(self, device: Optional[str] = None, audio_prompt_path: Optional[str] = None):
-        self._device = device or _get_device()
-        self._audio_prompt_path = audio_prompt_path or os.environ.get("CHATTERBOX_PROMPT_PATH")
-        self._model = None
-
-    def _load_model(self):
-        if self._model is not None:
-            return self._model
-        from chatterbox.tts_turbo import ChatterboxTurboTTS
-        self._model = ChatterboxTurboTTS.from_pretrained(device=self._device)
-        return self._model
-
-    def synthesize(self, text: str) -> bytes:
-        model = self._load_model()
-        kwargs = {}
-        if self._audio_prompt_path and os.path.isfile(self._audio_prompt_path):
-            kwargs["audio_prompt_path"] = self._audio_prompt_path
-        wav = model.generate(text, **kwargs)
-        buf = io.BytesIO()
-        torchaudio.save(buf, wav.cpu(), model.sr, format="wav")
-        buf.seek(0)
-        return buf.read()

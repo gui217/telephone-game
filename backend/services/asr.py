@@ -24,7 +24,7 @@ class ASRAdapter(ABC):
 class LocalWhisperASRAdapter(ASRAdapter):
     """Local OpenAI Whisper model (no API key)."""
 
-    def __init__(self, model_name: str = "base"):
+    def __init__(self, model_name: str = "tiny"):
         self._model_name = model_name
         self._model = whisper.load_model(model_name)
 
