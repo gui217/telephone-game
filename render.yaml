@@ -1,0 +1,31 @@
+# Render Blueprint for Telephone Game
+# Deploy: Connect your GitHub repo at https://render.com/deploy
+
+services:
+  - type: web
+    name: telephone-game-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: OPENAI_API_KEY
+        sync: false
+    healthCheckPath: /api/health
+
+  - type: web
+    name: telephone-game-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    rootDir: frontend
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://telephone-game-api.onrender.com/api/*
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
