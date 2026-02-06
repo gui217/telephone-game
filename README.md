@@ -64,28 +64,6 @@ npm install
 
 3. Open **http://localhost:5173**, set the four parameters, enter text or record your voice, and click **Start game**.
 
-## Create the GitHub repo (gui217)
-
-From the project root, with [GitHub CLI](https://cli.github.com/) installed and logged in as **gui217**:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit: Telephone Game UI with Whisper + Chatterbox (local)"
-gh repo create gui217/telephone-game --public --source=. --push
-```
-
-Or create **https://github.com/gui217/telephone-game** manually, then:
-
-```bash
-git init
-git remote add origin https://github.com/gui217/telephone-game.git
-git add .
-git commit -m "Initial commit: Telephone Game UI with Whisper + Chatterbox (local)"
-git branch -M main
-git push -u origin main
-```
-
 ## API
 
 - **POST /api/game/start** (multipart/form-data)  
