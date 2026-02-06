@@ -71,6 +71,14 @@ npm install
 - **GET /api/models** – lists available ASR and TTS model keys.
 - **GET /api/health** – health check.
 
+## Git hooks (optional)
+
+To stop Cursor from adding itself as co-author to commits, install the prepare-commit-msg hook:
+
+```bash
+cp scripts/prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg
+```
+
 ## License
 
 MIT
