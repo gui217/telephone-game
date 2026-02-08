@@ -287,8 +287,6 @@ function App() {
   const labelStyles = 'mb-1.5 block text-sm font-medium text-[var(--text-muted)]'
   const btnPrimary =
     'w-full rounded-[var(--radius)] bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-50'
-  const btnSecondary =
-    'rounded-[var(--radius)] border border-[var(--border)] bg-[var(--bg-surface)] px-3 py-2 text-sm font-medium text-[var(--text)] transition hover:border-[var(--accent-muted)] hover:bg-[var(--bg-base)]'
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text)]" style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}>

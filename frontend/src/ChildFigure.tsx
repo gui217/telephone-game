@@ -3,9 +3,9 @@
  * Active state shown with a ring.
  */
 export function ChildFigure({
-  index,
-  isFirst,
-  isLast,
+  index: _index,
+  isFirst: _isFirst,
+  isLast: _isLast,
   isActive,
   className = '',
 }: {
